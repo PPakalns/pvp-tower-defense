@@ -3,11 +3,13 @@ local class = require "middleclass"
 local LayerManager = require "LayerManager"
 local MenuLayer = require "MenuLayer"
 
-local layerManager = LayerManager:new()
+local layerManager = (require "LayerManager"):new()
+local imageManager = (require "ImageManager"):new()
 
 function love.load()
     local context = {
-        layerManager = layerManager
+        layerManager = layerManager,
+        imageManager = imageManager,
     }
     layerManager:push(MenuLayer:new(context))
 end
@@ -21,6 +23,7 @@ function love.draw()
 end
 
 -- Handle events
-function love.keypressed(key, scancode, isrepeat)
-    layerManager:event({name = 'keypressed', arg = {key, scancode, isrepeat}})
+-- Other similar events can  be mad in the same way
+function love.keypressed(...)
+    layerManager:event({name = 'keypressed', arg = {...}})
 end

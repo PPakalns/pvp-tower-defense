@@ -11,6 +11,9 @@ function GameLayer:initialize(context)
 
     self.rColor = 0;
     self.rDir = 1;
+    self.animation = context.imageManager:getAnimation('explosion')
+    self.frame = 1
+
 end
 
 -- Update layer, return true if layers under it should be updated
@@ -21,6 +24,11 @@ function GameLayer:update(dt)
     if self.rColor > 1 or self.rColor < 0 then
         self.rDir = self.rDir * -1
         self.rColor = math.max(0, math.min(self.rColor, 1))
+    end
+
+    self.frame = self.frame + 1
+    if self.frame > #self.animation.quads then
+        self.frame = 1
     end
 
     return false
@@ -39,6 +47,12 @@ function GameLayer:draw()
     love.graphics.setColor(self.rColor, 0, 0, 1)
     love.graphics.print("Game screen", 100, 100)
 
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(
+        self.animation.image,
+        self.animation.quads[self.frame],
+        200, 200
+        )
 end
 
 -- Distribute events, return true if event should be passed to lower layer
