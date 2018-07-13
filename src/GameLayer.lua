@@ -1,13 +1,14 @@
 local class = require "middleclass"
 
-local Layer = require('Layer')
-local PauseLayer = require('PauseLayer')
+local Layer = require 'Layer'
+local PauseLayer = require 'PauseLayer'
 
-local Entity = require('Entity')
-local EntityManager = require('EntityManager')
-local PositionComp = require('components/Position')
-local LoopingAnimationComp = require('components/LoopingAnimation')
-local DelayedActionComp = require('components/DelayedAction')
+local Entity = require 'Entity'
+local EntityManager = require 'EntityManager'
+local PositionComp = require 'components/Position'
+local LoopingAnimationComp = require 'components/LoopingAnimation'
+local DelayedActionComp = require 'components/DelayedAction'
+local MoveToComp = require 'components/MoveTo'
 
 local GameLayer = class('GameLayer', Layer)
 
@@ -24,8 +25,8 @@ function GameLayer:initialize(context)
 
     local resetPosition = function(entity)
         local positionComp = entity:getComponent('position')
-        positionComp.x = math.random(1, 400)
-        positionComp.y = math.random(1, 400)
+        positionComp.pos.x = math.random(1, 400)
+        positionComp.pos.y = math.random(1, 400)
     end
 
     for i = 1, 10 do
@@ -40,6 +41,7 @@ function GameLayer:initialize(context)
             )
         )
         explosionEntity:addComponent(DelayedActionComp:new('resetPosition', math.random(1, 200) / 100, resetPosition, true))
+        explosionEntity:addComponent(MoveToComp:new(50, 300, 300))
         self.entityManager:addEntity(explosionEntity)
     end
 end

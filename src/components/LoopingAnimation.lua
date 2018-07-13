@@ -40,7 +40,7 @@ function LoopingAnimation:draw()
     love.graphics.draw(
         self.animation.image,
         self.animation.quads[self.frame],
-        self.positionComp.x, self.positionComp.y
+        self.positionComp.pos.x, self.positionComp.pos.y
         )
 end
 
