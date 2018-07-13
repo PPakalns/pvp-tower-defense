@@ -1,37 +1,52 @@
 local class = require "middleclass"
 
-local Gui = require "Gui"
 local Layer = require('Layer')
 local PauseLayer = require('PauseLayer')
+
+local Entity = require('Entity')
+local EntityManager = require('EntityManager')
+local PositionComp = require('components/Position')
+local LoopingAnimationComp = require('components/LoopingAnimation')
+local DelayedActionComp = require('components/DelayedAction')
 
 local GameLayer = class('GameLayer', Layer)
 
 function GameLayer:initialize(context)
     Layer.initialize(self, context)
 
-    self.rColor = 0;
-    self.rDir = 1;
-    self.animation = context.imageManager:getAnimation('explosion')
-    self.frame = 1
+    self.entityManager = EntityManager:new()
+    self.game_context = {
+        layerManager = context.layerManager,
+        imageManager = context.imageManager,
+        entityManager = self.entityManager,
+    }
 
+
+    local resetPosition = function(entity)
+        local positionComp = entity:getComponent('position')
+        positionComp.x = math.random(1, 400)
+        positionComp.y = math.random(1, 400)
+    end
+
+    for i = 1, 10 do
+        local explosionEntity = Entity:new(self.entityManager)
+        explosionEntity:addComponent(PositionComp:new(math.random(1, 400), math.random(1, 400)))
+        explosionEntity:addComponent(
+            LoopingAnimationComp:new(
+                'explosion',
+                self.game_context.imageManager:getAnimation('explosion'),
+                2,
+                math.random(1, 100000) / 100000
+            )
+        )
+        explosionEntity:addComponent(DelayedActionComp:new('resetPosition', math.random(1, 200) / 100, resetPosition, true))
+        self.entityManager:addEntity(explosionEntity)
+    end
 end
 
 -- Update layer, return true if layers under it should be updated
 function GameLayer:update(dt)
-
-    -- Random code to control Game screen preview text
-    self.rColor = self.rColor + dt * self.rDir;
-    if self.rColor > 1 or self.rColor < 0 then
-        self.rDir = self.rDir * -1
-        self.rColor = math.max(0, math.min(self.rColor, 1))
-    end
-
-    self.frame = self.frame + 1
-    if self.frame > #self.animation.quads then
-        self.frame = 1
-    end
-
-    return false
+    self.entityManager:update(dt)
 end
 
 -- Return true if layer under it should be drawn
@@ -41,18 +56,7 @@ end
 
 -- Draw layer
 function GameLayer:draw()
-
-    -- Render temporary string
-    love.graphics.setFont(love.graphics.newFont(30))
-    love.graphics.setColor(self.rColor, 0, 0, 1)
-    love.graphics.print("Game screen", 100, 100)
-
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(
-        self.animation.image,
-        self.animation.quads[self.frame],
-        200, 200
-        )
+    self.entityManager:draw()
 end
 
 -- Distribute events, return true if event should be passed to lower layer
