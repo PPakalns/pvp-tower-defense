@@ -27,4 +27,13 @@ function Vec2:mult(num)
     return Vec2:new(num * self.x, num * self.y)
 end
 
+function Vec2:set(vec)
+    self.x, self.y = vec.x, vec.y
+end
+
+function Vec2:selfAdd(vec)
+    self.x, self.y = self.x + vec.x, self.y + vec.y
+    return self
+end
+
 return Vec2

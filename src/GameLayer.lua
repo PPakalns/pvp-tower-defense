@@ -41,7 +41,7 @@ function GameLayer:initialize(context)
                 )
             )
         explosionEntity:addComponent(DelayedActionComp:new('resetPosition', math.random(1, 200) / 100, resetPosition, true))
-        explosionEntity:addComponent(MoveToComp:new(50, 300, 300))
+        explosionEntity:addComponent(MoveToComp:new(50, 200, 200))
         self.entityManager:addEntity(explosionEntity)
     end
 end

@@ -18,8 +18,14 @@ function MoveTo:attach(entity)
 end
 
 function MoveTo:update(dt)
-    local movement = self.target:sub(self.positionComp.pos):normalize():mult(self.speed * dt)
-    self.positionComp.pos = self.positionComp.pos:add(movement)
+    local delta = self.target:sub(self.positionComp.pos)
+    local dist = self.speed * dt
+    if delta:length() < dist then
+        self.positionComp.pos:set(self.target)
+    else
+        local movement = delta:normalize():mult(dist)
+        self.positionComp.pos:selfAdd(movement)
+    end
 end
 
 return MoveTo
