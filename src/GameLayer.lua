@@ -38,8 +38,8 @@ function GameLayer:initialize(context)
                 self.game_context.imageManager:getAnimation('explosion'),
                 2,
                 math.random(1, 100000) / 100000
+                )
             )
-        )
         explosionEntity:addComponent(DelayedActionComp:new('resetPosition', math.random(1, 200) / 100, resetPosition, true))
         explosionEntity:addComponent(MoveToComp:new(50, 300, 300))
         self.entityManager:addEntity(explosionEntity)
