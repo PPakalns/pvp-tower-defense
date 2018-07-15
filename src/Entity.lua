@@ -30,6 +30,7 @@ function Entity:addComponent(component)
 end
 
 function Entity:removeComponent(component)
+    component:detach()
     self.components[component:getName()] = nil
     if component:isUpdatable() then
         for i = 1, #self.componentUpdateOrder[i] do
@@ -46,6 +47,13 @@ function Entity:removeComponent(component)
                 break
             end
         end
+    end
+end
+
+-- Called when entity is destroyed
+function Entity:destroy()
+    for i = #self.components, 1, -1 do
+        self.components[i]:detach()
     end
 end
 

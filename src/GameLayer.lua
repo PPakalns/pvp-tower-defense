@@ -25,7 +25,7 @@ function GameLayer:initialize(context)
         layerManager = context.layerManager,
         imageManager = context.imageManager,
         entityManager = self.entityManager,
-        world = World:new(20, 10),
+        world = World:new(21, 11),
     }
 
     self.gameContext.world:initializeEntities(self.gameContext)
@@ -38,7 +38,7 @@ function GameLayer:initialize(context)
         1
     )
     ship:addComponent(shipAnimationComp)
-    ship:addComponent(MoveToAcceleratedComp:new(100, 200, -120))
+    ship:addComponent(MoveToAcceleratedComp:new(32, 64, -40))
     ship:addComponent(
         CorrectDirectionAnimationComp:new(
             shipAnimationComp:getName(), 'ship', self.gameContext
@@ -50,15 +50,13 @@ function GameLayer:initialize(context)
             function(entity, localTable)
                 local dir = localTable.dir or 0
                 dir = dir + 1
-                if dir > 6 then
+                if dir > 5 then
                     dir = 1
                 end
                 local pos = entity:getComponent('position').pos
                 local targ
                 if dir == 5 then
                     targ = pos:clone()
-                elseif dir == 6 then
-                    targ = nil
                 else
                     targ = pos:add(Vec2.getMainDirectionVector(dir):mult(500))
                 end

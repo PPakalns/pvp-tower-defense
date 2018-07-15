@@ -25,6 +25,11 @@ function Component:attach(entity)
     self.entity = entity
 end
 
+function Component:detach()
+    -- Called when component is removed from entity
+    -- or entity is destroyed
+end
+
 function Component:update(dt)
     error('Not implemented')
 end

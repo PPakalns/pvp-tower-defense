@@ -13,6 +13,16 @@ function EntityManager:addEntity(entity)
     entity:setUniqueId(self.counter)
 end
 
+function EntityManager:removeEntity(entity)
+    local entity = self.entities[entity:getUniqueId()]
+    self.entities[entity:getUniqueId()] = nil
+    return entity
+end
+
+function EntityManager:destroyEntity(entity)
+    self:removeEntity(entity):destroy()
+end
+
 function EntityManager:update(dt)
     for _, entity in pairs(self.entities) do
         entity:update(dt)
