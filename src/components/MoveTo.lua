@@ -5,9 +5,9 @@ local Vec2 = require "../Vec2"
 
 local MoveTo = class('MoveTo', Component)
 
-function MoveTo:initialize(speed)
+function MoveTo:initialize(maxSpeed)
     Component.initialize(self, 'moveTo', true, false)
-    self.speed = speed
+    self.maxSpeed = maxSpeed
     self.target = nil       -- Vec2 of movement target coordinates
     self.positionComp = nil -- Stores the reference to position component
     self.lastMovement = nil -- Stores the movement done in the last update
@@ -29,7 +29,7 @@ function MoveTo:update(dt)
     end
 
     local delta = self.target:sub(self.positionComp.pos)
-    local dist = self.speed * dt
+    local dist = self.maxSpeed * dt
     if delta:length() < dist then
         self.positionComp.pos:set(self.target)
         self.lastMovement = delta

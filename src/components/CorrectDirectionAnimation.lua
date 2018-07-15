@@ -26,7 +26,7 @@ end
 
 function CorrectDirectionAnimation:update(dt)
     local lastMovement = self.moveToComp.lastMovement
-    if lastMovement == nil then
+    if lastMovement == nil or lastMovement:isZero() then
         return
     end
     local mainDir = lastMovement:getMainDirection()

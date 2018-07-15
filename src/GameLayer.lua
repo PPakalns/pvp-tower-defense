@@ -10,6 +10,7 @@ local LoopingAnimationComp = require 'components/LoopingAnimation'
 local CorrectDirectionAnimationComp = require 'components/CorrectDirectionAnimation'
 local DelayedActionComp = require 'components/DelayedAction'
 local MoveToComp = require 'components/MoveTo'
+local MoveToAcceleratedComp = require 'components/MoveToAccelerated'
 local World = require 'World'
 local Vec2 = require 'Vec2'
 
@@ -30,14 +31,14 @@ function GameLayer:initialize(context)
     self.gameContext.world:initializeEntities(self.gameContext)
 
     local ship = Entity:new()
-    ship:addComponent(PositionComp:new(100, 100))
+    ship:addComponent(PositionComp:new(100, 50))
     local shipAnimationComp = LoopingAnimationComp:new(
         'shipAnimation',
         self.gameContext.imageManager:getAnimation('shipRight'),
         1
     )
     ship:addComponent(shipAnimationComp)
-    ship:addComponent(MoveToComp:new(100))
+    ship:addComponent(MoveToAcceleratedComp:new(100, 200, -120))
     ship:addComponent(
         CorrectDirectionAnimationComp:new(
             shipAnimationComp:getName(), 'ship', self.gameContext
@@ -49,11 +50,18 @@ function GameLayer:initialize(context)
             function(entity, localTable)
                 local dir = localTable.dir or 0
                 dir = dir + 1
-                if dir > 4 then
+                if dir > 6 then
                     dir = 1
                 end
                 local pos = entity:getComponent('position').pos
-                local targ = pos:add(Vec2.getMainDirectionVector(dir):mult(500))
+                local targ
+                if dir == 5 then
+                    targ = pos:clone()
+                elseif dir == 6 then
+                    targ = nil
+                else
+                    targ = pos:add(Vec2.getMainDirectionVector(dir):mult(500))
+                end
                 entity:getComponent('moveTo'):setTarget(targ)
                 localTable.dir = dir
             end,

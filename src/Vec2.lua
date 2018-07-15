@@ -6,6 +6,14 @@ function Vec2:initialize(x, y)
     self.x, self.y = x, y
 end
 
+function Vec2:dot(vec)
+    return self.x * vec.x + self.y * vec.y
+end
+
+function Vec2:projection(vec)
+    return self:dot(vec) / vec:length()
+end
+
 function Vec2:length()
     return math.sqrt(self.x * self.x + self.y * self.y)
 end
@@ -31,6 +39,10 @@ function Vec2:set(vec)
     self.x, self.y = vec.x, vec.y
 end
 
+function Vec2:setCoords(x, y)
+    self.x, self.y = x, y
+end
+
 function Vec2:selfAdd(vec)
     self.x, self.y = self.x + vec.x, self.y + vec.y
     return self
@@ -38,6 +50,15 @@ end
 
 function Vec2:isZero()
     return self.x == 0 and self.y == 0
+end
+
+function Vec2:setZero()
+    self.x, self.y = 0, 0
+    return self
+end
+
+function Vec2:clone()
+    return Vec2:new(self.x, self.y)
 end
 
 function Vec2:getMainDirection()
@@ -62,6 +83,14 @@ function Vec2:getMainDirection()
     return res
 end
 
+function Vec2:limit(limitedLength)
+    local length = self:length()
+    if length > limitedLength then
+        return self:mult(limitedLength / length)
+    end
+    return self:clone()
+end
+
 Vec2.static.getMainDirectionVector = function(dir)
     if dir == 1 then
         return Vec2:new(1, 0)
@@ -69,9 +98,10 @@ Vec2.static.getMainDirectionVector = function(dir)
         return Vec2:new(0, 1)
     elseif dir == 3 then
         return Vec2:new(-1, 0)
-    else
+    elseif dir == 4 then
         return Vec2:new(0, -1)
     end
+    error("Err")
 end
 
 return Vec2
