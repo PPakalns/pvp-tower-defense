@@ -2,7 +2,7 @@ local class = require "middleclass"
 
 -- List of loadable images and their aliases
 local imageAliasPath = {
-    explosion = "images/boom3.png"
+    water = "images/coldwaterdeepwater.png"
 }
 
 -- Create animation that holds image and quads
@@ -39,8 +39,8 @@ function ImageManager:initialize()
 
     -- Predefine animations and their location in sprite sheet
     self.animations = {}
-    self.animations.explosion =
-        newAnimation(self:getImage('explosion'), 0, 0, 128, 128, 8 * 8)
+    self.animations.water =
+        newAnimation(self:getImage('water'), 0, 160, 32, 32, 3)
 
     print("Images loaded")
 end

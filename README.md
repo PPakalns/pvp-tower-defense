@@ -17,3 +17,9 @@ TODO: Add yourself
 Useful command on windows: `"C:\Program Files\LOVE\love.exe" --console`.
 
 See exact instructions: [LÖVE:Getting_Started](https://love2d.org/wiki/Getting_Started)
+
+## Used assets
+
+* /src/images/coldwaterdeepwater.png:
+    * Source: https://opengameart.org/content/lpc-more-water-transitions
+    * GPL 3.0, License available at https://www.gnu.org/licenses/gpl-3.0.html

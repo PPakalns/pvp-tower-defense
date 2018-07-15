@@ -7,6 +7,7 @@ local layerManager = (require "LayerManager"):new()
 local imageManager = (require "ImageManager"):new()
 
 function love.load()
+    love.window.setMode(660, 340)
     local context = {
         layerManager = layerManager,
         imageManager = imageManager,

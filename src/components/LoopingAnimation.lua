@@ -3,20 +3,19 @@ local class = require "middleclass"
 local Component = require "../Component"
 local LoopingAnimation = class('LoopingAnimation', Component)
 
-function LoopingAnimation:initialize(name, animation, total_duration, time_offset)
+function LoopingAnimation:initialize(name, animation, total_duration, relative_time_offset)
     Component.initialize(self, name, true, true)
     self.positionComp = nil
     self.animation = animation
     self.time_per_frame = total_duration / #animation.quads
     self.frame = 1
-    if time_offset ~= nil then
-        self.frame = 1 + math.floor(time_offset / self.time_per_frame)
-        while self.frame > #animation.quads do
-            self.frame = self.frame - #animation.quads
-        end
+    self.time = 0
+    if relative_time_offset ~= nil then
+        local time_offset = relative_time_offset * total_duration
+        self.frame = math.floor(time_offset / self.time_per_frame) + 1
+        self.frame = math.max(1, math.min(#animation.quads, self.frame))
         self.time = time_offset - self.frame * self.time_per_frame
     end
-    self.time = 0
 end
 
 function LoopingAnimation:attach(entity)

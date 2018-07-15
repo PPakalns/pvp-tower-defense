@@ -9,6 +9,7 @@ local PositionComp = require 'components/Position'
 local LoopingAnimationComp = require 'components/LoopingAnimation'
 local DelayedActionComp = require 'components/DelayedAction'
 local MoveToComp = require 'components/MoveTo'
+local World = require 'World'
 
 local GameLayer = class('GameLayer', Layer)
 
@@ -16,34 +17,15 @@ function GameLayer:initialize(context)
     Layer.initialize(self, context)
 
     self.entityManager = EntityManager:new()
-    self.game_context = {
+
+    self.gameContext = {
         layerManager = context.layerManager,
         imageManager = context.imageManager,
         entityManager = self.entityManager,
+        world = World:new(20, 10),
     }
 
-
-    local resetPosition = function(entity)
-        local positionComp = entity:getComponent('position')
-        positionComp.pos.x = math.random(1, 400)
-        positionComp.pos.y = math.random(1, 400)
-    end
-
-    for i = 1, 10 do
-        local explosionEntity = Entity:new(self.entityManager)
-        explosionEntity:addComponent(PositionComp:new(math.random(1, 400), math.random(1, 400)))
-        explosionEntity:addComponent(
-            LoopingAnimationComp:new(
-                'explosion',
-                self.game_context.imageManager:getAnimation('explosion'),
-                2,
-                math.random(1, 100000) / 100000
-                )
-            )
-        explosionEntity:addComponent(DelayedActionComp:new('resetPosition', math.random(1, 200) / 100, resetPosition, true))
-        explosionEntity:addComponent(MoveToComp:new(50, 200, 200))
-        self.entityManager:addEntity(explosionEntity)
-    end
+    self.gameContext.world:initializeEntities(self.gameContext)
 end
 
 -- Update layer, return true if layers under it should be updated
