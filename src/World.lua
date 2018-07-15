@@ -10,20 +10,21 @@ local World = class('World')
 function World:initialize(tileCntX, tileCntY)
     self.width = tileCntX
     self.height = tileCntY
+    self.offX = 10
+    self.offY = 10
+    self.tileSize = 32
 
     self.map = Utility.createArray2D(self.height, self.width, false)
 end
 
 
 function World:initializeEntities(gameContext)
-    local offX, offY = 10, 10
-    local tsize = 32
-
     for y = 1, self.height do
         for x = 1, self.width do
             local water = Entity:new()
             water:addComponent(
-                PositionComp:new(offX + (x - 1) * tsize, offY + (y - 1) * tsize)
+                PositionComp:new(self.offX + (x - 1) * self.tileSize,
+                                 self.offY + (y - 1) * self.tileSize)
                 )
             water:addComponent(
                 LoopingAnimationComp:new(

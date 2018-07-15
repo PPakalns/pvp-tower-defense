@@ -36,4 +36,42 @@ function Vec2:selfAdd(vec)
     return self
 end
 
+function Vec2:isZero()
+    return self.x == 0 and self.y == 0
+end
+
+function Vec2:getMainDirection()
+    local res = 0
+    if self:isZero() then
+        return res
+    end
+
+    if math.abs(self.y) > math.abs(self.x)  then
+        if self.y > 0 then
+            res = 2
+        else
+            res = 4
+        end
+    else
+        if self.x > 0 then
+            res = 1
+        else
+            res = 3
+        end
+    end
+    return res
+end
+
+Vec2.static.getMainDirectionVector = function(dir)
+    if dir == 1 then
+        return Vec2:new(1, 0)
+    elseif dir == 2 then
+        return Vec2:new(0, 1)
+    elseif dir == 3 then
+        return Vec2:new(-1, 0)
+    else
+        return Vec2:new(0, -1)
+    end
+end
+
 return Vec2

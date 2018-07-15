@@ -7,9 +7,11 @@ local Entity = require 'Entity'
 local EntityManager = require 'EntityManager'
 local PositionComp = require 'components/Position'
 local LoopingAnimationComp = require 'components/LoopingAnimation'
+local CorrectDirectionAnimationComp = require 'components/CorrectDirectionAnimation'
 local DelayedActionComp = require 'components/DelayedAction'
 local MoveToComp = require 'components/MoveTo'
 local World = require 'World'
+local Vec2 = require 'Vec2'
 
 local GameLayer = class('GameLayer', Layer)
 
@@ -26,6 +28,39 @@ function GameLayer:initialize(context)
     }
 
     self.gameContext.world:initializeEntities(self.gameContext)
+
+    local ship = Entity:new()
+    ship:addComponent(PositionComp:new(100, 100))
+    local shipAnimationComp = LoopingAnimationComp:new(
+        'shipAnimation',
+        self.gameContext.imageManager:getAnimation('shipRight'),
+        1
+    )
+    ship:addComponent(shipAnimationComp)
+    ship:addComponent(MoveToComp:new(100))
+    ship:addComponent(
+        CorrectDirectionAnimationComp:new(
+            shipAnimationComp:getName(), 'ship', self.gameContext
+        ))
+    ship:addComponent(
+        DelayedActionComp:new(
+            'changeMovementTarget',
+            2,
+            function(entity, localTable)
+                local dir = localTable.dir or 0
+                dir = dir + 1
+                if dir > 4 then
+                    dir = 1
+                end
+                local pos = entity:getComponent('position').pos
+                local targ = pos:add(Vec2.getMainDirectionVector(dir):mult(500))
+                entity:getComponent('moveTo'):setTarget(targ)
+                localTable.dir = dir
+            end,
+            true
+        ))
+    self.entityManager:addEntity(ship)
+
 end
 
 -- Update layer, return true if layers under it should be updated

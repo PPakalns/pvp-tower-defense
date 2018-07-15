@@ -7,7 +7,7 @@ local layerManager = (require "LayerManager"):new()
 local imageManager = (require "ImageManager"):new()
 
 function love.load()
-    love.window.setMode(660, 340)
+    love.window.setMode(660 * 2, 340 * 2)
     local context = {
         layerManager = layerManager,
         imageManager = imageManager,
@@ -20,6 +20,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.scale(2, 2)
     layerManager:draw(dt)
 end
 

@@ -14,13 +14,15 @@ function DelayedAction:initialize(actionName, delay, callback, loop)
     self.loop = (loop and true or false)
     self.remaining = delay
     self.callback = callback
+
+    self.localTable = {}
 end
 
 function DelayedAction:update(dt)
     self.remaining = self.remaining - dt
     if self.remaining < 0 then
         -- execute callback
-        self.callback(self.entity)
+        self.callback(self.entity, self.localTable)
         if self.loop then
             self.remaining = self.delay
         else

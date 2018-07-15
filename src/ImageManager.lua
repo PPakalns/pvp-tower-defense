@@ -2,16 +2,21 @@ local class = require "middleclass"
 
 -- List of loadable images and their aliases
 local imageAliasPath = {
-    water = "images/coldwaterdeepwater.png"
+    water = "images/coldwaterdeepwater.png",
+    spritesheet = "images/spritesheet.png"
 }
 
 -- Create animation that holds image and quads
 -- that represents the location of sprites in the image
-function newAnimation(image, x, y, width, height, frames)
+function newAnimation(image, x, y, width, height, frames, offX, offY)
     local animation = {}
     local quads = {}
     animation.image = image
     animation.quads = quads
+
+    -- Offset in sprite to the center of object
+    animation.offX = offX or 0
+    animation.offY = offY or 0
 
     for i = 1, frames do
         table.insert(quads, love.graphics.newQuad(x, y, width, height, image:getDimensions()))
@@ -35,12 +40,22 @@ function ImageManager:initialize()
     self.aliases = imageAliasPath
     for alias, path in pairs(imageAliasPath) do
         self.images[alias] = love.graphics.newImage(path)
+        self.images[alias]:setFilter('nearest', 'nearest')
     end
 
     -- Predefine animations and their location in sprite sheet
     self.animations = {}
     self.animations.water =
         newAnimation(self:getImage('water'), 0, 160, 32, 32, 3)
+
+    self.animations.shipLeft =
+        newAnimation(self:getImage('spritesheet'), 0, 0, 34, 47, 2, 18, 40)
+    self.animations.shipUp =
+        newAnimation(self:getImage('spritesheet'), 68, 0, 34, 47, 2, 16, 32)
+    self.animations.shipDown =
+        newAnimation(self:getImage('spritesheet'), 136, 0, 34, 47, 2, 16, 32)
+    self.animations.shipRight =
+        newAnimation(self:getImage('spritesheet'), 0, 63, 34, 47, 2, 18, 40)
 
     print("Images loaded")
 end

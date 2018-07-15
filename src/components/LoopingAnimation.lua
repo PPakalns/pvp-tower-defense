@@ -6,9 +6,15 @@ local LoopingAnimation = class('LoopingAnimation', Component)
 function LoopingAnimation:initialize(name, animation, total_duration, relative_time_offset)
     Component.initialize(self, name, true, true)
     self.positionComp = nil
+    self:setAnimation(animation, total_duration, relative_time_offset)
+end
+
+function LoopingAnimation:setAnimation(animation, total_duration, relative_time_offset)
+    total_duration = total_duration or 1
+
     self.animation = animation
-    self.time_per_frame = total_duration / #animation.quads
     self.frame = 1
+    self.time_per_frame = total_duration / #animation.quads
     self.time = 0
     if relative_time_offset ~= nil then
         local time_offset = relative_time_offset * total_duration
@@ -39,7 +45,8 @@ function LoopingAnimation:draw()
     love.graphics.draw(
         self.animation.image,
         self.animation.quads[self.frame],
-        self.positionComp.pos.x, self.positionComp.pos.y
+        self.positionComp.pos.x - self.animation.offX,
+        self.positionComp.pos.y - self.animation.offY
         )
 end
 
