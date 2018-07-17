@@ -53,13 +53,13 @@ Entities.createBasicFactory = function (gameContext, team, tileVec)
     base:addComponent(BasicAttributesComp:new(team, Config.basicFactory.basicAttributes))
     base:addComponent(BuildingComp:new(gameContext.world))
     base:addComponent(RectangleComp:new(
-            'baseRect',
+            'factoryRect',
             (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
             gameContext.world.tileSize, gameContext.world.tileSize,
             0, 0
         ))
     base:addComponent(RectangleComp:new(
-            'baseRect',
+            'factoryRect2',
             (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
             gameContext.world.tileSize - 10, gameContext.world.tileSize - 10,
             5, 5

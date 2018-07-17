@@ -19,6 +19,9 @@ function Entity:getUniqueId(id)
 end
 
 function Entity:addComponent(component)
+    if self.components[component:getName()] ~= nil then
+        error("Two components with the same name added to entity")
+    end
     component:attach(self)
     self.components[component:getName()] = component
     if component:isUpdatable() then

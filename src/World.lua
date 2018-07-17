@@ -119,7 +119,7 @@ function World:getShortestPath(map, factoryCnt, startPos, enemyTeam)
     return ok, dist
 end
 
-function World:updateDistances(map, factoryCnt)
+function World:calculateDistances(map, factoryCnt)
     local calcMapDistance = {}
     local allOk = true
     for i = 1, 2 do
@@ -139,7 +139,7 @@ function World:addBuilding(basicAttributesComp, tilePos)
     -- Assumes that path checking is already done
     self.map[tilePos.y][tilePos.x] = {team = basicAttributesComp.team, type = basicAttributesComp.type }
 
-    local ok, calcMapDistance = self:updateDistances(self.map, self.factoryCnt)
+    local ok, calcMapDistance = self:calculateDistances(self.map, self.factoryCnt)
     if ok == false and basicAttributesComp.type ~= Types.base then
         error("Incorrectly added building to map!!!!")
     end
@@ -153,7 +153,7 @@ function World:removeBuilding(basicAttributesComp, tilePos)
 
     self.map[tilePos.y][tilePos.x] = nil
 
-    local ok, calcMapDistance = self:updateDistances(self.map, self.factoryCnt)
+    local ok, calcMapDistance = self:calculateDistances(self.map, self.factoryCnt)
     if ok == false then
         error("Incorrectly removed building to map!!!! How???")
     end
