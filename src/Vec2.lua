@@ -61,6 +61,10 @@ function Vec2:clone()
     return Vec2:new(self.x, self.y)
 end
 
+function Vec2:integerEqual(vec)
+    return self.x == vec.x and self.y == vec.y
+end
+
 function Vec2:getMainDirection()
     local res = 0
     if self:isZero() then
