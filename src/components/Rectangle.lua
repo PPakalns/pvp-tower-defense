@@ -22,8 +22,8 @@ function Rectangle:draw()
     self.color:set()
     love.graphics.rectangle(
         'line',
-        self.positionComp.pos.x - self.offX,
-        self.positionComp.pos.y - self.offY,
+        self.positionComp.pos.x + self.offX,
+        self.positionComp.pos.y + self.offY,
         self.w,
         self.h
         )

@@ -22,7 +22,7 @@ function World:initialize(tileCntX, tileCntY)
 
     local middleRow = math.floor(self.height / 2) + 1
     self.baseCoords = { Vec2:new(1, middleRow), Vec2:new(self.width, middleRow) }
-    self.spawnerCnt = {0, 0}
+    self.factoryCnt = {0, 0}
     self.shipCnt = {0, 0}
     self.mapShipCnt = {}
     self.mapDistance = {}
@@ -48,17 +48,23 @@ function World:initializeEntities(gameContext)
 
     gameContext.entityManager:addEntity(Entities.createBasicShip(gameContext, 1, Vec2:new(1, 1)))
 
+    -- Temporary buildings to demonstrate pathfinding
+    for i = 1, 9 do
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(5, i)))
+    end
+    gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(5, 11)))
+
     -- We do not initialize pathfinding, because it will be done when bases and other buildings are added
 end
 
-function World:getShortestPath(map, spawnerCnt, startPos, enemyTeam)
+function World:getShortestPath(map, factoryCnt, startPos, enemyTeam)
 
     -- Simple bfs to get shortest paths
 
     -- All ships and ship facilities must reach their target
     local enemyBaseReached = false
     local enemyShips = 0
-    local enemySpawners = 0
+    local enemyFactories = 0
 
     local dist = Utility.createArray2D(self.height, self.width, nil)
 
@@ -83,9 +89,9 @@ function World:getShortestPath(map, spawnerCnt, startPos, enemyTeam)
             else
                 lookDeeper = true
             end
-        elseif m.type == Types.spawner then
+        elseif m.type == Types.factory then
             if m.team == enemyTeam then
-                enemySpawners = enemySpawners + 1
+                enemyFactories = enemyFactories + 1
             end
         elseif m.type == Types.tower then
         else
@@ -108,16 +114,16 @@ function World:getShortestPath(map, spawnerCnt, startPos, enemyTeam)
 
     local ok = enemyBaseReached
         and enemyShips == self.shipCnt[enemyTeam]
-        and enemySpawners == spawnerCnt[enemyTeam]
+        and enemyFactories == factoryCnt[enemyTeam]
 
     return ok, dist
 end
 
-function World:updateDistances(map, spawnerCnt)
+function World:updateDistances(map, factoryCnt)
     local calcMapDistance = {}
     local allOk = true
     for i = 1, 2 do
-        local ok, calcMap = self:getShortestPath(map, spawnerCnt, self.baseCoords[3 - i], i)
+        local ok, calcMap = self:getShortestPath(map, factoryCnt, self.baseCoords[3 - i], i)
         allOk = ok and allOk
         calcMapDistance[i] = calcMap
     end
@@ -125,14 +131,15 @@ function World:updateDistances(map, spawnerCnt)
 end
 
 function World:addBuilding(basicAttributesComp, tilePos)
-    if basicAttributesComp.type == Types.spawner then
-        self.spawnerCnt[basicAttributesComp.team] = self.spawnerCnt[basicAttributesComp.team] + 1
+    print("Adding building with type "..basicAttributesComp.type.." at "..tilePos.x..", "..tilePos.y)
+    if basicAttributesComp.type == Types.factory then
+        self.factoryCnt[basicAttributesComp.team] = self.factoryCnt[basicAttributesComp.team] + 1
     end
 
     -- Assumes that path checking is already done
     self.map[tilePos.y][tilePos.x] = {team = basicAttributesComp.team, type = basicAttributesComp.type }
 
-    local ok, calcMapDistance = self:updateDistances(self.map, self.spawnerCnt)
+    local ok, calcMapDistance = self:updateDistances(self.map, self.factoryCnt)
     if ok == false and basicAttributesComp.type ~= Types.base then
         error("Incorrectly added building to map!!!!")
     end
@@ -140,13 +147,13 @@ function World:addBuilding(basicAttributesComp, tilePos)
 end
 
 function World:removeBuilding(basicAttributesComp, tilePos)
-    if basicAttributesComp.type == Types.spawner then
-        self.spawnerCnt[basicAttributesComp.team] = self.spawnerCnt[basicAttributesComp.team] - 1
+    if basicAttributesComp.type == Types.factory then
+        self.factoryCnt[basicAttributesComp.team] = self.factoryCnt[basicAttributesComp.team] - 1
     end
 
     self.map[tilePos.y][tilePos.x] = nil
 
-    local ok, calcMapDistance = self:updateDistances(self.map, self.spawnerCnt)
+    local ok, calcMapDistance = self:updateDistances(self.map, self.factoryCnt)
     if ok == false then
         error("Incorrectly removed building to map!!!! How???")
     end

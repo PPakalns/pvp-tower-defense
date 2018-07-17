@@ -33,10 +33,8 @@ end
 
 Entities.createBaseEntity = function (gameContext, team, tileVec)
     local base = Entity:new()
-    base:addComponent(PositionComp:new(
-            gameContext.world.offX + (tileVec.x - 1) * gameContext.world.tileSize,
-            gameContext.world.offY + (tileVec.y - 1) * gameContext.world.tileSize
-        ))
+    local worldPos = gameContext.world:getWorldCoord(tileVec)
+    base:addComponent(PositionComp:new(worldPos.x, worldPos.y))
     base:addComponent(BasicAttributesComp:new(team, Config.base.basicAttributes))
     base:addComponent(BuildingComp:new(gameContext.world))
     base:addComponent(RectangleComp:new(
@@ -44,6 +42,27 @@ Entities.createBaseEntity = function (gameContext, team, tileVec)
             (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
             gameContext.world.tileSize, gameContext.world.tileSize,
             0, 0
+        ))
+    return base
+end
+
+Entities.createBasicFactory = function (gameContext, team, tileVec)
+    local base = Entity:new()
+    local worldPos = gameContext.world:getWorldCoord(tileVec)
+    base:addComponent(PositionComp:new(worldPos.x, worldPos.y))
+    base:addComponent(BasicAttributesComp:new(team, Config.basicFactory.basicAttributes))
+    base:addComponent(BuildingComp:new(gameContext.world))
+    base:addComponent(RectangleComp:new(
+            'baseRect',
+            (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
+            gameContext.world.tileSize, gameContext.world.tileSize,
+            0, 0
+        ))
+    base:addComponent(RectangleComp:new(
+            'baseRect',
+            (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
+            gameContext.world.tileSize - 10, gameContext.world.tileSize - 10,
+            5, 5
         ))
     return base
 end
@@ -66,11 +85,6 @@ Entities.createBasicShip = function (gameContext, team, tileVec)
     ship:addComponent(BasicAttributesComp:new(team, Config.basicShip.basicAttributes))
     ship:addComponent(ShipComp:new(gameContext.world))
     ship:addComponent(PathFindingComp:new(gameContext.world))
-    ship:addComponent(DelayedActionComp:new('resetShip', 10,
-            function(entity)
-                entity:getComponent('position').pos:set(worldPos)
-            end, true)
-        )
     return ship
 end
 
