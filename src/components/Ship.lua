@@ -50,6 +50,7 @@ function Ship:attach(entity)
 end
 
 function Ship:detach()
+    Component.detach(self)
     self.cworld:remove(self)
     self.world:removeShip(self.basicAttributes, self.world:getTileCoord(self.positionComp.pos))
 end

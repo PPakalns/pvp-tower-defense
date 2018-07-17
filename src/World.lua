@@ -50,9 +50,9 @@ function World:initializeEntities(gameContext)
 
     -- Temporary buildings to demonstrate pathfinding
     for i = 1, 9 do
-        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(5, i)))
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - 5, i)))
     end
-    gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(5, 11)))
+    gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - 5, 11)))
 
     -- We do not initialize pathfinding, because it will be done when bases and other buildings are added
 end
@@ -192,7 +192,7 @@ function World:getWorldCoordMiddle(tilePos)
     return self:getWorldCoord(tilePos):selfAdd(Vec2:new(t2, t2))
 end
 
-function World:getNextCellMiddle(pos, team)
+function World:getNextTileInPath(pos, team)
     local tilePos = self:getTileCoord(pos)
     local dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}}
 
@@ -220,7 +220,12 @@ function World:getNextCellMiddle(pos, team)
     end
 
     local randomNextTile = nextPos[math.random(1, #nextPos)]
-    return self:getWorldCoordMiddle(randomNextTile)
+    return randomNextTile
+end
+
+
+function World:getNextWorldCoordInPath(pos, team)
+    return self:getWorldCoordMiddle(self:getNextTileInPath(pos, team))
 end
 
 return World

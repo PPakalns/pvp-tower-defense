@@ -5,6 +5,7 @@ local PauseLayer = require 'PauseLayer'
 
 local EntityManager = require 'EntityManager'
 local World = require 'World'
+local Config = require 'Config'
 
 local GameLayer = class('GameLayer', Layer)
 
@@ -17,7 +18,7 @@ function GameLayer:initialize(context)
         layerManager = context.layerManager,
         imageManager = context.imageManager,
         entityManager = self.entityManager,
-        world = World:new(21, 11),
+        world = World:new(21 * Config.gameScale, 11 * Config.gameScale),
     }
 
     self.gameContext.world:initializeEntities(self.gameContext)

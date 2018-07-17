@@ -23,7 +23,7 @@ function PathFinding:update(dt)
     if self.lastTile == nil or not tileNow:integerEqual(self.lastTile) then
         self.lastTile = tileNow
         self.moveToComp:setTarget(
-            self.world:getNextCellMiddle(self.positionComp.pos, self.basicAttributesComp.team)
+            self.world:getNextWorldCoordInPath(self.positionComp.pos, self.basicAttributesComp.team)
             )
     end
 end

@@ -1,6 +1,7 @@
 local Types = (require 'Utility').entityTypes
 
 local CONFIG = {
+    gameScale = 2,  -- 1 or 2
     base = {
         basicAttributes = {
             type = Types.base,
@@ -16,6 +17,7 @@ local CONFIG = {
             defense = 0.1,
             repair = 1
         },
+        spawnRate = 10,
     },
     basicTower = {
         basicAttributes = {

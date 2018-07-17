@@ -24,6 +24,7 @@ function Building:attach(entity)
 end
 
 function Building:detach()
+    Component.detach(self)
     self.cworld:removeBuilding(self)
     self.world:removeBuilding(self.basicAttributes, self.world:getTileCoord(self.positionComp.pos))
 end

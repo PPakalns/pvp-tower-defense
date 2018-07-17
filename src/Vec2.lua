@@ -95,6 +95,10 @@ function Vec2:limit(limitedLength)
     return self:clone()
 end
 
+function Vec2:toString()
+    return "(" .. self.x .. "; " .. self.y .. ")"
+end
+
 Vec2.static.getMainDirectionVector = function(dir)
     if dir == 1 then
         return Vec2:new(1, 0)

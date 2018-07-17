@@ -10,6 +10,7 @@ local CorrectDirectionAnimationComp = require 'components/CorrectDirectionAnimat
 local DelayedActionComp = require 'components/DelayedAction'
 local MoveToComp = require 'components/MoveTo'
 local MoveToAcceleratedComp = require 'components/MoveToAccelerated'
+local SpawnEntityComp = require 'components/SpawnEntity'
 local PathFindingComp = require 'components/PathFinding'
 local Color = require 'Color'
 local Vec2 = require 'Vec2'
@@ -47,24 +48,27 @@ Entities.createBaseEntity = function (gameContext, team, tileVec)
 end
 
 Entities.createBasicFactory = function (gameContext, team, tileVec)
-    local base = Entity:new()
+    local factory = Entity:new()
     local worldPos = gameContext.world:getWorldCoord(tileVec)
-    base:addComponent(PositionComp:new(worldPos.x, worldPos.y))
-    base:addComponent(BasicAttributesComp:new(team, Config.basicFactory.basicAttributes))
-    base:addComponent(BuildingComp:new(gameContext.world))
-    base:addComponent(RectangleComp:new(
+    factory:addComponent(PositionComp:new(worldPos.x, worldPos.y))
+    factory:addComponent(BasicAttributesComp:new(team, Config.basicFactory.basicAttributes))
+    factory:addComponent(BuildingComp:new(gameContext.world))
+    factory:addComponent(
+        SpawnEntityComp:new('basicSpawn', Config.basicFactory.spawnRate, gameContext, Entities.createBasicShip)
+        )
+    factory:addComponent(RectangleComp:new(
             'factoryRect',
             (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
             gameContext.world.tileSize, gameContext.world.tileSize,
             0, 0
         ))
-    base:addComponent(RectangleComp:new(
+    factory:addComponent(RectangleComp:new(
             'factoryRect2',
             (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
             gameContext.world.tileSize - 10, gameContext.world.tileSize - 10,
             5, 5
         ))
-    return base
+    return factory
 end
 
 Entities.createBasicShip = function (gameContext, team, tileVec)
@@ -85,6 +89,7 @@ Entities.createBasicShip = function (gameContext, team, tileVec)
     ship:addComponent(BasicAttributesComp:new(team, Config.basicShip.basicAttributes))
     ship:addComponent(ShipComp:new(gameContext.world))
     ship:addComponent(PathFindingComp:new(gameContext.world))
+    print("Basic ship created")
     return ship
 end
 

@@ -6,10 +6,10 @@ local MenuLayer = require "MenuLayer"
 local layerManager = (require "LayerManager"):new()
 local imageManager = (require "ImageManager"):new()
 
-local SCALE = 2
+local Config = require 'Config'
 
 function love.load()
-    love.window.setMode(32 * 22 * SCALE, 32 * 12 * SCALE)
+    love.window.setMode(32 + 32 * 21 * Config.gameScale, 32 + 32 * 11 * Config.gameScale)
     local context = {
         layerManager = layerManager,
         imageManager = imageManager,
@@ -22,7 +22,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.scale(SCALE, SCALE)
+    love.graphics.scale((3 - Config.gameScale), (3 - Config.gameScale))
     layerManager:draw(dt)
 end
 

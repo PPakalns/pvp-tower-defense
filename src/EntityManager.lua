@@ -11,11 +11,13 @@ function EntityManager:addEntity(entity)
     self.counter = self.counter + 1
     self.entities[self.counter] = entity
     entity:setUniqueId(self.counter)
+    print(entity:getUniqueId() .. " added to entity manager!")
 end
 
 function EntityManager:removeEntity(entity)
     local entity = self.entities[entity:getUniqueId()]
     self.entities[entity:getUniqueId()] = nil
+    print(entity:getUniqueId() .. " removed from entity manager!")
     return entity
 end
 
