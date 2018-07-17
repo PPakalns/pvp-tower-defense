@@ -49,12 +49,12 @@ function World:initializeEntities(gameContext)
     gameContext.entityManager:addEntity(Entities.createBasicShip(gameContext, 1, Vec2:new(1, 1)))
 
     -- Temporary buildings to demonstrate pathfinding
-    for i = 1, 9 do
-        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - 5, i)))
+    for i = 1, 10 do
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 1, Vec2:new(math.random(2, 10), math.random(1, self.height))))
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - math.random(1, 9), math.random(1, self.height))))
     end
-    gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - 5, 11)))
 
-    -- We do not initialize pathfinding, because it will be done when bases and other buildings are added
+    -- We do not initialize pathfinding, because it is already done when bases and other buildings are added
 end
 
 function World:getShortestPath(map, factoryCnt, startPos, enemyTeam)
@@ -194,7 +194,7 @@ end
 
 function World:getNextTileInPath(pos, team)
     local tilePos = self:getTileCoord(pos)
-    local dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}}
+    local dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
 
     local best = math.huge
     local nextPos = {}
@@ -208,9 +208,7 @@ function World:getNextTileInPath(pos, team)
                 -- do nothing
             elseif val < best then
                 best = val
-                nextPos = {Vec2:new(tx, ty)}
-            elseif val == best then
-                table.insert(nextPos, Vec2:new(tx, ty))
+                nextPos = Vec2:new(tx, ty)
             end
         end
     end
@@ -219,8 +217,7 @@ function World:getNextTileInPath(pos, team)
         error("Incorrect game state")
     end
 
-    local randomNextTile = nextPos[math.random(1, #nextPos)]
-    return randomNextTile
+    return nextPos
 end
 
 
