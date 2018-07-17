@@ -6,14 +6,14 @@ local CONFIG = {
             type = Types.base,
             health = 100,
             defense = 0.8, -- Avoids 80% of damage
-            repair = 0.5,
+            repair = 0.5,  -- health regen per second
         },
     },
     basicFactory = {
         basicAttributes = {
             type = Types.factory,
             health = 50,
-            defense = 1,
+            defense = 0.1,
             repair = 1
         },
     },
@@ -21,7 +21,7 @@ local CONFIG = {
         basicAttributes = {
             type = Types.tower,
             health = 100,
-            defense = 0.7,
+            defense = 0.3,
             repair = 0.2
         },
     },
@@ -29,7 +29,7 @@ local CONFIG = {
         basicAttributes = {
             type = Types.ship,
             health = 25,
-            defense = 1,
+            defense = 0,
         },
     },
 }
