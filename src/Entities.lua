@@ -7,6 +7,7 @@ local FollowEntityComp = require 'components/FollowEntity'
 local BasicAttackComp = require 'components/BasicAttack'
 local LoopingAnimationComp = require 'components/LoopingAnimation'
 local BasicAttributesComp = require 'components/BasicAttributes'
+local DestroyEntityComp = require 'components/DestroyEntity'
 local BuildingComp = require 'components/Building'
 local ShipComp = require 'components/Ship'
 local CorrectDirectionAnimationComp = require 'components/CorrectDirectionAnimation'
@@ -121,14 +122,28 @@ Entities.spawnBasicCannonBall = function (gameContext, pos, targetEntity, damage
     cannonBall:addComponent(PositionComp:new(pos.x, pos.y))
     cannonBall:addComponent(MoveToComp:new(200))
     cannonBall:addComponent(CircleComp:new('cannonball', (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1), 3))
-    cannonBall:addComponent(FollowEntityComp:new(targetEntity, false, function(followEntityComp, targetEntity)
+    cannonBall:addComponent(FollowEntityComp:new(targetEntity, false, function(followEntityComp, targetEntity, endPos)
         gameContext.entityManager:destroyEntity(cannonBall)
         if not targetEntity:isDestroyed() then
             targetEntity:getComponent('basicAttributes'):applyDamage(damage)
         end
-        -- TODO: Add smoke
+        Entities.spawnExplosion(gameContext, endPos)
     end))
     gameContext.entityManager:addEntity(cannonBall)
+end
+
+Entities.spawnExplosion = function (gameContext, pos)
+    local explosion = Entity:new()
+    local explosionTime = 0.8
+    explosion:addComponent(PositionComp:new(pos.x, pos.y))
+    explosion:addComponent(LoopingAnimationComp:new(
+        'explosion',
+        gameContext.imageManager:getAnimation('explosion'),
+        explosionTime
+    ))
+    explosion:addComponent(DestroyEntityComp:new(explosionTime))
+    print("Basic explosion created")
+    gameContext.entityManager:addEntity(explosion)
 end
 
 return Entities

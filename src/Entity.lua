@@ -46,7 +46,7 @@ function Entity:removeComponent(component)
     component:detach()
     self.components[component:getName()] = nil
     if component:isUpdatable() then
-        for i = 1, #self.componentUpdateOrder[i] do
+        for i = 1, #self.componentUpdateOrder do
             if self.componentUpdateOrder[i] == component then
                 table.remove(self.componentUpdateOrder, i)
                 break
@@ -54,7 +54,7 @@ function Entity:removeComponent(component)
         end
     end
     if component:isDrawable() then
-        for i = 1, #self.componentDrawOrder[i] do
+        for i = 1, #self.componentDrawOrder do
             if self.componentDrawOrder[i] == component then
                 table.remove(self.componentDrawOrder, i)
                 break

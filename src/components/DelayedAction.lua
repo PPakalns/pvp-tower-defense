@@ -21,13 +21,13 @@ end
 function DelayedAction:update(dt)
     self.remaining = self.remaining - dt
     if self.remaining < 0 then
-        -- execute callback
-        self.callback(self.entity, self.localTable)
         if self.loop then
             self.remaining = self.delay
         else
             self.entity:removeComponent(self)
         end
+        -- execute callback
+        self.callback(self.entity, self.localTable)
     end
 end
 

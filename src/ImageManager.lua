@@ -57,6 +57,9 @@ function ImageManager:initialize()
     self.animations.shipRight =
         newAnimation(self:getImage('spritesheet'), 0, 63, 34, 47, 2, 18, 40)
 
+    self.animations.explosion =
+        newAnimation(self:getImage('spritesheet'), 0, 47, 16, 16, 5, 8, 8)
+
     print("Images loaded")
 end
 
