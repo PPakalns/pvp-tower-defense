@@ -9,7 +9,7 @@ local Ship = class('Ship', Component)
 
 function Ship:initialize(world)
     Component.initialize(self, 'ship', true, false)
-    self.size = 16
+    self.size = 24
     self.offX = self.size / 2
     self.offY = self.size / 2
 

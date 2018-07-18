@@ -1,18 +1,18 @@
 local Types = (require 'Utility').entityTypes
 
 local CONFIG = {
-    gameScale = 1,  -- 1 or 2
+    gameScale = 2,  -- 1 or 2
     base = {
         basicAttributes = {
             type = Types.base,
-            health = 100,
+            health = 100,  -- HP
             defense = 0.8, -- Avoids 80% of damage
             repair = 0.5,  -- health regen per second
         },
         basicAttack = {
-            radius = 32 * 4,
-            damage = 10,
-            reloadSec = 0.5,
+            radius = 32 * 4,   -- Reach (in reality rectangle in size (2*radius)X(2*radius))
+            damage = 10,       -- Damage dealt by one cannonball
+            reloadSec = 0.5,   -- Seconds to reload one cannonball
         }
     },
     basicFactory = {
@@ -22,7 +22,7 @@ local CONFIG = {
             defense = 0.1,
             repair = 1
         },
-        spawnRate = 10,
+        spawnSec = 10,
     },
     basicTower = {
         basicAttributes = {
@@ -42,6 +42,7 @@ local CONFIG = {
             type = Types.ship,
             health = 25,
             defense = 0,
+            repair = 0,
         },
         basicAttack = {
             radius = 32 * 2,

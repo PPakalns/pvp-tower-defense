@@ -58,7 +58,7 @@ Entities.createBasicFactory = function (gameContext, team, tileVec)
     factory:addComponent(BasicAttributesComp:new(team, Config.basicFactory.basicAttributes))
     factory:addComponent(BuildingComp:new(gameContext.world))
     factory:addComponent(
-        SpawnEntityComp:new('basicSpawn', Config.basicFactory.spawnRate, gameContext, Entities.createBasicShip)
+        SpawnEntityComp:new('basicSpawn', Config.basicFactory.spawnSec, gameContext, Entities.createBasicShip)
         )
     factory:addComponent(RectangleComp:new(
             'factoryRect',
