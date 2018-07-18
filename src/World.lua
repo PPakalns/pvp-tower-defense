@@ -7,6 +7,7 @@ local Bump = require 'bump'
 local Queue = require 'Queue'
 local Types = (require 'Utility').entityTypes
 local Entities = require 'Entities'
+local Config = require 'Config'
 
 local World = class('World')
 
@@ -46,12 +47,11 @@ function World:initializeEntities(gameContext)
         gameContext.entityManager:addEntity(Entities.createBaseEntity(gameContext, i, self.baseCoords[i]))
     end
 
-    gameContext.entityManager:addEntity(Entities.createBasicShip(gameContext, 1, Vec2:new(1, 1)))
-
+    local d = math.floor(self.width / 2) - 2
     -- Temporary buildings to demonstrate pathfinding
-    for i = 1, 10 do
-        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 1, Vec2:new(math.random(2, 10), math.random(1, self.height))))
-        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - math.random(1, 9), math.random(1, self.height))))
+    for i = 1, Config.gameScale * 7 do
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 1, Vec2:new(math.random(2, 2 + d), math.random(1, self.height))))
+        gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - math.random(1, 1 + d), math.random(1, self.height))))
     end
 
     -- We do not initialize pathfinding, because it is already done when bases and other buildings are added
@@ -155,6 +155,10 @@ function World:removeBuilding(basicAttributesComp, tilePos)
 
     local ok, calcMapDistance = self:calculateDistances(self.map, self.factoryCnt)
     if ok == false then
+        if basicAttributesComp.type == Types.base then
+            -- TODO, this is bad way how to detect this!!!
+            error("Team "..basicAttributesComp.team.." wins!")
+        end
         error("Incorrectly removed building to map!!!! How???")
     end
     self.mapDistance = calcMapDistance

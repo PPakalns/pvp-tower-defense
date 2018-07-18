@@ -14,7 +14,7 @@ function MoveTo:initialize(maxSpeed)
 end
 
 function MoveTo:setTarget(vec)
-    self.target = vec
+    self.target = vec:clone()
 end
 
 function MoveTo:attach(entity)
@@ -39,6 +39,10 @@ function MoveTo:update(dt)
         self.lastMovement = movement
         self.positionComp.pos:selfAdd(movement)
     end
+end
+
+function MoveTo:isTargetSet()
+    return self.target ~= nil
 end
 
 return MoveTo

@@ -11,6 +11,7 @@ function EntityManager:addEntity(entity)
     self.counter = self.counter + 1
     self.entities[self.counter] = entity
     entity:setUniqueId(self.counter)
+    entity:setEntityManager(self)
     print(entity:getUniqueId() .. " added to entity manager!")
 end
 

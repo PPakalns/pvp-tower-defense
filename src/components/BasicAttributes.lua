@@ -20,4 +20,13 @@ function BasicAttributes:update(dt)
     end
 end
 
+function BasicAttributes:applyDamage(damage)
+    local damageReceived = (1 - self.defense) * damage
+    self.health = self.health - damageReceived
+    if self.health <= 0 then
+        -- DEAD, sadness
+        self.entity.entityManager:destroyEntity(self.entity)
+    end
+end
+
 return BasicAttributes

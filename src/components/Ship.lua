@@ -16,7 +16,7 @@ function Ship:initialize(world)
     self.world = world
     self.cworld = world.cworld
     self.positionComp = nil
-    self.basicAttributes = nil  -- Basic attributes for fast access from collisions
+    self.basicAttributesComp = nil  -- Basic attributes for fast access from collisions
 
     self.tilePosition = nil
 end
@@ -31,28 +31,28 @@ function Ship:update(dt)
     local newTilePos = self.world:getTileCoord(self.positionComp.pos)
     if not newTilePos:integerEqual(self.tilePosition) then
         -- Remove ship from old tile
-        self.world:removeShip(self.basicAttributes, self.tilePosition)
+        self.world:removeShip(self.basicAttributesComp, self.tilePosition)
         self.tilePosition = newTilePos
         -- Add ship to the new one
-        self.world:addShip(self.basicAttributes, self.tilePosition)
+        self.world:addShip(self.basicAttributesComp, self.tilePosition)
     end
 end
 
 function Ship:attach(entity)
     Component.attach(self, entity)
     self.positionComp = entity:getComponent('position')
-    self.basicAttributes = entity:getComponent('basicAttributes')
+    self.basicAttributesComp = entity:getComponent('basicAttributes')
     self.cworld:add(self,
         self.positionComp.pos.x - self.offX, self.positionComp.pos.y - self.offY,
         self.size, self.size)
-    self.world:addShip(self.basicAttributes, self.world:getTileCoord(self.positionComp.pos))
+    self.world:addShip(self.basicAttributesComp, self.world:getTileCoord(self.positionComp.pos))
     self.tilePosition = self.world:getTileCoord(self.positionComp.pos)
 end
 
 function Ship:detach()
     Component.detach(self)
     self.cworld:remove(self)
-    self.world:removeShip(self.basicAttributes, self.world:getTileCoord(self.positionComp.pos))
+    self.world:removeShip(self.basicAttributesComp, self.world:getTileCoord(self.positionComp.pos))
 end
 
 return Ship

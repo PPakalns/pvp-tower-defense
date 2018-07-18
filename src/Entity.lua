@@ -6,7 +6,13 @@ function Entity:initialize()
     self.components = {}
     self.componentUpdateOrder = {}
     self.componentDrawOrder = {}
+    self.entityDestroyed = false
+    self.entityManager = nil
     self.unique_id = 0
+end
+
+function Entity:isDestroyed()
+    return self.entityDestroyed
 end
 
 -- Functions to fastly retrieve entity in EntityManager, when entity is destroyed
@@ -16,6 +22,10 @@ end
 
 function Entity:getUniqueId(id)
     return self.unique_id
+end
+
+function Entity:setEntityManager(entityManager)
+    self.entityManager = entityManager
 end
 
 function Entity:addComponent(component)
@@ -55,8 +65,9 @@ end
 
 -- Called when entity is destroyed
 function Entity:destroy()
-    for i = #self.components, 1, -1 do
-        self.components[i]:detach()
+    self.entityDestroyed = true
+    for _, component in pairs(self.components) do
+        component:detach()
     end
 end
 
@@ -70,6 +81,9 @@ end
 
 function Entity:update(dt)
     for i = 1, #self.componentUpdateOrder do
+        if self.entityDestroyed then
+            break
+        end
         self.componentUpdateOrder[i]:update(dt)
     end
 end

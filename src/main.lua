@@ -9,7 +9,10 @@ local imageManager = (require "ImageManager"):new()
 local Config = require 'Config'
 
 function love.load()
-    love.window.setMode(32 + 32 * 21 * Config.gameScale, 32 + 32 * 11 * Config.gameScale)
+
+    math.randomseed( os.time() )
+
+    love.window.setMode(32 * (3 - Config.gameScale) + 32 * 21 * 2, 32 * (3 - Config.gameScale) + 32 * 11 * 2)
     local context = {
         layerManager = layerManager,
         imageManager = imageManager,
