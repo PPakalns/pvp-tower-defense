@@ -75,6 +75,24 @@ Entities.createBasicFactory = function (gameContext, team, tileVec)
     return factory
 end
 
+Entities.createBasicTower = function (gameContext, team, tileVec)
+    local tower = Entity:new()
+    local worldPos = gameContext.world:getWorldCoordMiddle(tileVec)
+    tower:addComponent(PositionComp:new(worldPos.x, worldPos.y))
+    tower:addComponent(BasicAttributesComp:new(team, Config.basicTower.basicAttributes))
+    tower:addComponent(BuildingComp:new(gameContext.world))
+    tower:addComponent(RectangleComp:new(
+            'towerRect',
+            (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1),
+            gameContext.world.tileSize, gameContext.world.tileSize,
+            -gameContext.world.tileSize / 2, -gameContext.world.tileSize / 2
+        ))
+    tower:addComponent(CircleComp:new(
+        'towerCircle2', (team == 1) and Color:new(1, 0, 0, 1) or Color:new(0, 1, 0, 1), gameContext.world.tileSize / 2))
+    tower:addComponent(BasicAttackComp:new(gameContext, Config.basicTower.basicAttack, Entities.spawnBasicCannonBall))
+    return tower
+end
+
 Entities.createBasicShip = function (gameContext, team, tileVec)
     local ship = Entity:new()
     local worldPos = gameContext.world:getWorldCoordMiddle(tileVec)

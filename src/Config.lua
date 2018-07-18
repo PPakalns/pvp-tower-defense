@@ -28,9 +28,14 @@ local CONFIG = {
         basicAttributes = {
             type = Types.tower,
             health = 100,
-            defense = 0.3,
+            defense = 0.5,
             repair = 0.2
         },
+        basicAttack = {
+            radius = 32 * 3,
+            damage = 20,
+            reloadSec = 1,
+        }
     },
     basicShip = {
         basicAttributes = {

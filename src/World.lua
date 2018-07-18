@@ -49,7 +49,9 @@ function World:initializeEntities(gameContext)
 
     local d = math.floor(self.width / 2) - 2
     -- Temporary buildings to demonstrate pathfinding
-    for i = 1, Config.gameScale * 7 do
+    for i = 1, Config.gameScale * 3 do
+        gameContext.entityManager:addEntity(Entities.createBasicTower(gameContext, 1, Vec2:new(math.random(2, 2 + d), math.random(1, self.height))))
+        gameContext.entityManager:addEntity(Entities.createBasicTower(gameContext, 2, Vec2:new(self.width - math.random(1, 1 + d), math.random(1, self.height))))
         gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 1, Vec2:new(math.random(2, 2 + d), math.random(1, self.height))))
         gameContext.entityManager:addEntity(Entities.createBasicFactory(gameContext, 2, Vec2:new(self.width - math.random(1, 1 + d), math.random(1, self.height))))
     end
