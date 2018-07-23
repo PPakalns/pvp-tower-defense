@@ -4,6 +4,7 @@
 ## Development team
 
 * [PPakalns](https://github.com/PPakalns)
+* [SeikSugaloth](https:/github.com/SeikSugaloth628)
 
 TODO: Add yourself
 
