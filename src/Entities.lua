@@ -16,6 +16,7 @@ local MoveToComp = require 'components/MoveTo'
 local MoveToAcceleratedComp = require 'components/MoveToAccelerated'
 local SpawnEntityComp = require 'components/SpawnEntity'
 local PathFindingComp = require 'components/PathFinding'
+local HealthBarComp = require 'components/HealthBar'
 local Color = require 'Color'
 local Vec2 = require 'Vec2'
 
@@ -113,7 +114,11 @@ Entities.createBasicShip = function (gameContext, team, tileVec)
     ship:addComponent(ShipComp:new(gameContext.world))
     ship:addComponent(PathFindingComp:new(gameContext.world))
     ship:addComponent(BasicAttackComp:new(gameContext, Config.basicShip.basicAttack, Entities.spawnBasicCannonBall))
-    print("Basic ship created")
+    
+	-- HP display
+	ship:addComponent(HealthBarComp:new(Config.basicShip.basicAttributes.health))
+	
+	print("Basic ship created")
     return ship
 end
 
